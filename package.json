@@ -1,0 +1,27 @@
+{
+  "name": "generate-by-validation",
+  "version": "0.0.1",
+  "description": "Module to generate String based on validation",
+  "main": "generate.js",
+  "dependencies": {
+    "lodash": "^3.10.1",
+    "randexp": "^0.4.0"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "mocha": "^2.3.3"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "sunupf",
+  "license": "MIT",
+  "keywords": [
+    "faker",
+    "invalid",
+    "mocks",
+    "generate",
+    "testing",
+    "data"
+  ]
+}
