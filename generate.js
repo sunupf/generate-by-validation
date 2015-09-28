@@ -154,6 +154,9 @@ var data  = function(){
               }
               break;
             case 'alpha' :
+            case 'alpha_dash' :
+            case 'alpha_num' :
+            case 'email' :
               if(notMatch){
                 specialObject.pattern = availablePattern[size[0]].notMatch
               }else{
