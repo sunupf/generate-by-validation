@@ -162,6 +162,9 @@ var data  = function(){
               }else{
                 specialObject.pattern = availablePattern[size[0]].pattern
               }
+              if(size[0] === 'email'){
+                delete specialObject.sizeMin; 
+              }
               break;
             default:
               throw new Error("Unsupported validation")
