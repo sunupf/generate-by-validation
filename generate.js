@@ -38,7 +38,12 @@ var data  = function(){
     var specialObject = arrayToSpecialObj(arrayOfValidation,!match)
 
     // Convert specialObject to regexRule
-    var regexRule = buildRegex(specialObject)
+    var regexRule
+    if(match){
+      regexRule = buildRegex(specialObject)
+    }else{
+      regexRule = buildNotMatchRegex(specialObject)
+    }
 
     // generate using randexp
     if(regexRule){
@@ -62,10 +67,13 @@ var data  = function(){
    * @param {Array} validation Array of Validation rule
    */
   function arrayToSpecialObj(arrayOfValidation, notMatch){
+    var specialObject = {}
     if(typeof notMatch === "undefined"){
       notMatch = false
+    }else{
+      // specialObject.pattern = "[ ]"
     }
-    var specialObject = {}
+    specialObject.pattern = "."
 
     // try{
       _.forEach(arrayOfValidation,function(n,key){
@@ -142,12 +150,9 @@ var data  = function(){
               }
               break;
             case 'required':
-              if((typeof specialObject.pattern === "undefined") && !notMatch){
-                specialObject.pattern = "."
+              if(!notMatch){
                 specialObject.sizeMin = 1
-              }else if(specialObject.pattern && !notMatch){
-                specialObject.sizeMin = 1
-              }else if(typeof specialObject.pattern === "undefined" && notMatch){
+              }else if(specialObject.pattern === "." && notMatch){
                 specialObject.pattern = "[ ]"
               }else{
 
@@ -163,7 +168,7 @@ var data  = function(){
                 specialObject.pattern = availablePattern[size[0]].pattern
               }
               if(size[0] === 'email'){
-                delete specialObject.sizeMin; 
+                delete specialObject.sizeMin;
               }
               break;
             default:
