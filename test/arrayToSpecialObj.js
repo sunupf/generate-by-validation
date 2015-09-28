@@ -32,15 +32,20 @@ describe("Test arrayToSpecialObj",function(){
           */
          it("Undefined value",function(){
            var expected = "Minimal size is undefined, please check your syntax at 'min'"
-
            var arrayOfValidation = ['required',"min"]
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var expected = "Minimal size is undefined, please check your syntax at 'min:'"
            var arrayOfValidation = ['required',"min:"]
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Less than Zero case for min rule
@@ -49,8 +54,11 @@ describe("Test arrayToSpecialObj",function(){
            var expected = "Minimal size is less than 0"
 
            var arrayOfValidation = ['required',"min:-1"]
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
        /**
@@ -105,14 +113,21 @@ describe("Test arrayToSpecialObj",function(){
          it("Undefined value",function(){
            var expected = "Maximal size is undefined, please check your syntax at 'max'"
 
-           var arrayOfValidation = ['required',"max"]
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
 
-           var expected = "Maximal size is undefined, please check your syntax at 'max:'"
+           var arrayOfValidation = ['required',"max"]
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
+
            var arrayOfValidation = ['required',"max:"]
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           var expected = "Maximal size is undefined, please check your syntax at 'max:'"
+           try{
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           }catch(e){
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Less than Zero case for max rule
@@ -121,8 +136,11 @@ describe("Test arrayToSpecialObj",function(){
            var expected = "Maximal size is less than 0"
 
            var arrayOfValidation = ['required',"max:-1"]
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
 
@@ -141,8 +159,11 @@ describe("Test arrayToSpecialObj",function(){
              'sizeMax' : 20
            }
 
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e,expected);
+           }
          })
          /**
           * Between when Min > then Max
@@ -151,8 +172,11 @@ describe("Test arrayToSpecialObj",function(){
            var arrayOfValidation = ['required',"between:20,8"]
            var expected = "Minimal Size has bigger value than Maximal Size"
 
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between when MIn > then Max but write at the begining of rule
@@ -160,9 +184,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min > Max at begining",function(){
            var arrayOfValidation = ["between:20,8",'required']
            var expected = "Minimal Size has bigger value than Maximal Size"
-
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule when Min value Undefined
@@ -170,8 +196,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min value Undefined",function(){
            var arrayOfValidation = ["between:,10",'required']
            var expected = "Minimal size is undefined, please check your syntax at 'between:,10'"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule when Max value Undefined
@@ -179,13 +208,19 @@ describe("Test arrayToSpecialObj",function(){
          it("Max value Undefined",function(){
            var arrayOfValidation = ["between:10",'required']
            var expected = "Maximal size is undefined, please check your syntax at 'between:10'"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var arrayOfValidation = ["between:10,",'required']
            var expected = "Maximal size is undefined, please check your syntax at 'between:10,'"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule when Min and Max value Undefined
@@ -193,13 +228,19 @@ describe("Test arrayToSpecialObj",function(){
          it("Min and Max value Undefined",function(){
            var arrayOfValidation = ["between",'required']
            var expected = "Minimal and Maximal Size are undefined, please check yout syntax at 'between'"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var arrayOfValidation = ["between:",'required']
            var expected = "Minimal and Maximal Size are undefined, please check yout syntax at 'between:'"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule min value less than 0
@@ -207,8 +248,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min value less than 0",function(){
            var arrayOfValidation = ["between:-1,10",'required']
            var expected = "Minimal size is less than 0"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
 
          /**
@@ -217,8 +261,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Max value less than 0",function(){
            var arrayOfValidation = ["between:2,-2",'required']
            var expected = "Minimal Size has bigger value than Maximal Size"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
 
          /**
@@ -227,8 +274,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min and Max value less than 0",function(){
            var arrayOfValidation = ["between:-2,-1",'required']
            var expected = "Minimal size is less than 0"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
 
@@ -256,13 +306,19 @@ describe("Test arrayToSpecialObj",function(){
          it("Undefined value",function(){
            var arrayOfValidation = ['required',"exact"]
            var expected = "Exact size is undefined"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var arrayOfValidation = ['required',"exact:"]
            var expected = "Exact size is undefined"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Exact size is less than Zero
@@ -270,8 +326,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Less than zero value",function(){
            var arrayOfValidation = ['required',"exact:-1"]
            var expected = "Exact size is less than 0"
-           var result = data.arrayToSpecialObj(arrayOfValidation)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
      })
@@ -362,13 +421,19 @@ describe("Test arrayToSpecialObj",function(){
            var expected = "Minimal size is undefined, please check your syntax at 'min'"
 
            var arrayOfValidation = ['required',"min"]
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var expected = "Minimal size is undefined, please check your syntax at 'min:'"
            var arrayOfValidation = ['required',"min:"]
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Less than Zero case for min rule
@@ -377,8 +442,11 @@ describe("Test arrayToSpecialObj",function(){
            var expected = "Minimal size is less than 0"
 
            var arrayOfValidation = ['required',"min:-1"]
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
        /**
@@ -431,13 +499,19 @@ describe("Test arrayToSpecialObj",function(){
            var expected = "Maximal size is undefined, please check your syntax at 'max'"
 
            var arrayOfValidation = ['required',"max"]
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var expected = "Maximal size is undefined, please check your syntax at 'max:'"
            var arrayOfValidation = ['required',"max:"]
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Less than Zero case for max rule
@@ -446,8 +520,11 @@ describe("Test arrayToSpecialObj",function(){
            var expected = "Maximal size is less than 0"
 
            var arrayOfValidation = ['required',"max:-1"]
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
 
@@ -475,9 +552,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min > Max",function(){
            var arrayOfValidation = ['required',"between:20,8"]
            var expected = "Minimal Size has bigger value than Maximal Size"
-
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between when MIn > then Max but write at the begining of rule
@@ -485,9 +564,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min > Max at begining",function(){
            var arrayOfValidation = ["between:20,8",'required']
            var expected = "Minimal Size has bigger value than Maximal Size"
-
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule when Min value Undefined
@@ -495,8 +576,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min value Undefined",function(){
            var arrayOfValidation = ["between:,10",'required']
            var expected = "Minimal size is undefined, please check your syntax at 'between:,10'"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule when Max value Undefined
@@ -504,13 +588,19 @@ describe("Test arrayToSpecialObj",function(){
          it("Max value Undefined",function(){
            var arrayOfValidation = ["between:10",'required']
            var expected = "Maximal size is undefined, please check your syntax at 'between:10'"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var arrayOfValidation = ["between:10,",'required']
            var expected = "Maximal size is undefined, please check your syntax at 'between:10,'"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule when Min and Max value Undefined
@@ -518,13 +608,19 @@ describe("Test arrayToSpecialObj",function(){
          it("Min and Max value Undefined",function(){
            var arrayOfValidation = ["between",'required']
            var expected = "Minimal and Maximal Size are undefined, please check yout syntax at 'between'"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
 
            var arrayOfValidation = ["between:",'required']
            var expected = "Minimal and Maximal Size are undefined, please check yout syntax at 'between:'"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Between rule min value less than 0
@@ -532,8 +628,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min value less than 0",function(){
            var arrayOfValidation = ["between:-1,10",'required']
            var expected = "Minimal size is less than 0"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
 
          /**
@@ -542,8 +641,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Max value less than 0",function(){
            var arrayOfValidation = ["between:2,-2",'required']
            var expected = "Minimal Size has bigger value than Maximal Size"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
 
          /**
@@ -552,8 +654,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Min and Max value less than 0",function(){
            var arrayOfValidation = ["between:-2,-1",'required']
            var expected = "Minimal size is less than 0"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try {
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           } catch (e) {
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
 
@@ -581,13 +686,18 @@ describe("Test arrayToSpecialObj",function(){
          it("Undefined value",function(){
            var arrayOfValidation = ['required',"exact"]
            var expected = "Exact size is undefined"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try{
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           }catch(e){
+             assert.deepEqual(e.message,expected);
+           }
 
            var arrayOfValidation = ['required',"exact:"]
-           var expected = "Exact size is undefined"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try{
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           }catch(e){
+             assert.deepEqual(e.message,expected);
+           }
          })
          /**
           * Exact size is less than Zero
@@ -595,8 +705,11 @@ describe("Test arrayToSpecialObj",function(){
          it("Less than zero value",function(){
            var arrayOfValidation = ['required',"exact:-1"]
            var expected = "Exact size is less than 0"
-           var result = data.arrayToSpecialObj(arrayOfValidation, true)
-           assert.deepEqual(result.message,expected);
+           try{
+             var result = data.arrayToSpecialObj(arrayOfValidation, true)
+           }catch(e){
+             assert.deepEqual(e.message,expected);
+           }
          })
        })
      })

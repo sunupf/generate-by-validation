@@ -42,5 +42,11 @@ describe("Test stringtoArray",function(){
       result = data.stringToArray(validation)
       assert.deepEqual(result,expected);
     })
+    it("Undefined string",function(){
+      var validation = ""
+      var expected = []
+      result = data.stringToArray(validation)
+      assert.deepEqual(result,expected);
+    })
   })
 })

@@ -110,11 +110,13 @@ describe("Test buildRegex",function(){
         'pattern' : ""
       }
       var mode = "i"
-      var expected = false
+      var expected = "Couldn't generate regex because of undefined pattern"
 
-      var result = data.buildRegex(specialObject,mode)
-
-      assert.deepEqual(result,expected);
+      try {
+        var result = data.buildRegex(specialObject,mode)
+      } catch (e) {
+        assert.deepEqual(e.message,expected);
+      }
     })
     /**
      * Pattern is undefined
@@ -122,11 +124,14 @@ describe("Test buildRegex",function(){
     it("Pattern is undefined",function(){
       var specialObject = {}
       var mode = "i"
-      var expected = false
+      var expected = "Couldn't generate regex because of undefined pattern"
 
-      var result = data.buildRegex(specialObject,mode)
+      try {
+        var result = data.buildRegex(specialObject,mode)
+      } catch (e) {
+        assert.deepEqual(e.message,expected);
+      }
 
-      assert.deepEqual(result,expected);
     })
   })
 })
