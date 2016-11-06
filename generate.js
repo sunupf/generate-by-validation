@@ -151,7 +151,9 @@ var data  = function(){
               break;
             case 'required':
               if(!notMatch){
-                specialObject.sizeMin = 1
+                if(!specialObject.sizeMin){
+                  specialObject.sizeMin = 1
+                }
               }else if(specialObject.pattern === "." && notMatch){
                 specialObject.pattern = "[ ]"
               }else{
