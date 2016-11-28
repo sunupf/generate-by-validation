@@ -36,9 +36,15 @@ var data  = function(){
             }
             break;
           case 'min':
+          case '^min':
             var min = parseInt(size[1])
             if(min >= 0){
-              specialObject.min = min
+              specialObject.min = {"value":min}
+              if(size[0]=="min"){
+                specialObject.min.negation : false;
+              }else{
+                specialObject.min.negation : true;
+              }
             }else if(typeof size[1] === "undefined" || size[1] === "" ){
               throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
             }else if(min<0){
@@ -46,9 +52,15 @@ var data  = function(){
             }
             break;
           case 'max':
+          case '^max':
             var max = parseInt(size[1])
             if(max >= 0){
-              specialObject.max = max
+              specialObject.max = {"value":max}
+              if(size[0]=="max"){
+                specialObject.max.negation : false;
+              }else{
+                specialObject.max.negation : true;
+              }
             }else if(typeof size[1] === "undefined" || size[1] === "" ){
               throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
             }else if(min<0){
@@ -56,10 +68,18 @@ var data  = function(){
             }
             break;
           case 'exact':
+          case '^exact':
             var exactSize = parseInt(size[1])
             if(exactSize>=0){
-              specialObject.min = exactSize
-              specialObject.max = exactSize
+              specialObject.min = {"value":exactSize}
+              specialObject.max = {"value":exactSize}
+              if(size[0]=="exact"){
+                specialObject.max.negation : false;
+                specialObject.min.negation : false;
+              }else{
+                specialObject.max.negation : true;
+                specialObject.min.negation : true;
+              }
             }else if(typeof size[1] === "undefined" || size[1] === ""){
               throw new Error("Exact size is undefined")
             }else if(exactSize<0){
@@ -69,73 +89,6 @@ var data  = function(){
             }
             break;
           case 'between':
-            if(typeof size[1] != "undefined" && size[1] != ""){
-              // throw new Error(size)
-              var betweenSize = size[1].split(",")
-
-              if(
-                typeof betweenSize[0] != "undefined" &&
-                typeof betweenSize[1] != "undefined" &&
-                parseInt(betweenSize[0]) <= parseInt(betweenSize[1])
-              ){
-                specialObject.min = parseInt(betweenSize[0])
-                specialObject.max = parseInt(betweenSize[1])
-                if(specialObject.min<0){
-                  throw new Error("Minimal size is less than 0")
-                }
-                if(specialObject.max<0){
-                  throw new Error("Minimal size is less than 0")
-                }
-              }else if(typeof betweenSize[0] === "undefined" || betweenSize[0] === ""){
-                // Throw Error
-                throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
-              }else if(typeof betweenSize[1] === "undefined" || betweenSize[1] === ""){
-                // Throw Error
-                throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
-              }else if(parseInt(betweenSize[0])>parseInt(betweenSize[1])){
-                // Throw Error
-                throw new Error("Minimal Size has bigger value than Maximal Size")
-              }else{
-                throw new Error("Unknown Error")
-              }
-            }else{
-              // Throw Error
-              throw new Error("Minimal and Maximal Size are undefined, please check yout syntax at '"+n+"'")
-            }
-            break;
-          case '^min':
-            var min = parseInt(size[1])
-            if(min >= 0){
-              specialObject.notMin = min
-            }else if(typeof size[1] === "undefined" || size[1] === "" ){
-              throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
-            }else if(min<0){
-              throw new Error("Minimal size is less than 0")
-            }
-            break;
-          case '^max':
-            var max = parseInt(size[1])
-            if(max >= 0){
-              specialObject.notMax = max
-            }else if(typeof size[1] === "undefined" || size[1] === "" ){
-              throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
-            }else if(min<0){
-              throw new Error("Maximal size is less than 0")
-            }
-            break;
-          case '^exact':
-            var exactSize = parseInt(size[1])
-            if(exactSize>=0){
-              specialObject.notMin = exactSize
-              specialObject.notMax = exactSize
-            }else if(typeof size[1] === "undefined" || size[1] === ""){
-              throw new Error("Exact size is undefined")
-            }else if(exactSize<0){
-              throw new Error("Exact size is less than 0")
-            }else{
-              throw new Error("Unknown Errors")
-            }
-            break;
           case '^between':
             if(typeof size[1] != "undefined" && size[1] != ""){
               // throw new Error(size)
@@ -146,8 +99,15 @@ var data  = function(){
                 typeof betweenSize[1] != "undefined" &&
                 parseInt(betweenSize[0]) <= parseInt(betweenSize[1])
               ){
-                specialObject.notMin = parseInt(betweenSize[0])
-                specialObject.notMax = parseInt(betweenSize[1])
+                specialObject.min = {"value":parseInt(betweenSize[0])}
+                specialObject.max = {"value":parseInt(betweenSize[1])}
+                if(size[0]=="between"){
+                  specialObject.max.negation : false;
+                  specialObject.min.negation : false;
+                }else{
+                  specialObject.max.negation : true;
+                  specialObject.min.negation : true;
+                }
                 if(specialObject.min<0){
                   throw new Error("Minimal size is less than 0")
                 }
