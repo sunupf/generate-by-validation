@@ -2,15 +2,64 @@ var data  = function(){
   var Randexp = require("randexp");
   var _ = require("lodash");
 
-  var rules = require("./rules");
+  var availablePattern = {
+    'alpha': {
+      'pattern' : "[a-zA-Z]",
+      'notMatch' : "[^a-zA-Z]"
+    },
+    'alpha_num': {
+      'pattern' : "[a-zA-Z0-9]",
+      'notMatch' : "[^a-zA-Z0-9]"
+    },
+    'alpha_dash': {
+      'pattern' : "[a-zA-Z\-]",
+      'notMatch' : "[^a-zA-Z\-]"
+    },
+    'email': {
+      'pattern': "[a-zA-Z0-9._-]{1,20}@[a-zA-Z0-9\-]{1,20}[.][a-z]{2,6}",
+      'notMatch': "[^a-zA-Z0-9._-]{1,20}@[^a-zA-Z0-9\-]{1,20}[^.][^a-z]{2,6}"
+    },
+
+  }
 
   /**
    * Generate string based on validation
    * @param {String} validation validation rule
    */
-  function generate(validations){
+  function generate(validation, match){
+    if(typeof match === "undefined"){
+      match = true
+    }
+
+    // split validation rule
+    var arrayOfValidation = stringToArray(validation)
+
     // Convert string to Special Object
-    var specialObject = arrayToSpecialObj(arrayOfValidation)
+    var specialObject = arrayToSpecialObj(arrayOfValidation,!match)
+
+    // Convert specialObject to regexRule
+    var regexRule
+    if(match){
+      regexRule = buildRegex(specialObject)
+    }else{
+      regexRule = buildNotMatchRegex(specialObject)
+    }
+
+    // generate using randexp
+    if(regexRule){
+      return new Randexp(regexRule).gen();
+    }else{
+      throw new Error("Could not build regelar expression from parameters provided")
+    }
+  }
+
+  /**
+   * Convert validation rules to Array
+   * @param {String}  Validation Rules
+   */
+  function stringToArray(validation){
+    var arrayOfValidation = _.compact(validation.split("|"));
+    return arrayOfValidation;
   }
 
   /**
@@ -26,19 +75,21 @@ var data  = function(){
       var size = n.split(':')
       if(size.length > 0 && size.length<=2){
         switch(size[0]){
-          case 'alpha' :
-          case 'alpha_dash' :
-          case 'alpha_num' :
-          case 'email' :
-            specialObject.pattern = rules[size[0]].pattern
-            if(size[0] === 'email'){
-              delete specialObject.size;
-            }
-            break;
           case 'min':
             var min = parseInt(size[1])
             if(min >= 0){
-              specialObject.min= min
+              specialObject.sizeMin = min
+            }else if(typeof size[1] === "undefined" || size[1] === "" ){
+              throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
+            }else if(min<0){
+              throw new Error("Minimal size is less than 0")
+            }
+            break;
+          case '^min':
+            var min = parseInt(size[1])
+            if(min >= 0){
+              specialObject.sizeMin = 0
+              specialObject.sizeMax = min
             }else if(typeof size[1] === "undefined" || size[1] === "" ){
               throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
             }else if(min<0){
@@ -46,9 +97,19 @@ var data  = function(){
             }
             break;
           case 'max':
-            var max = parseInt(size[1])
-            if(max >= 0){
-              specialObject.max= max
+            var min = parseInt(size[1])
+            if(min >= 0){
+              specialObject.sizeMax = parseInt(size[1])
+            }else if(typeof size[1] === "undefined" || size[1] === "" ){
+              throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
+            }else if(min<0){
+              throw new Error("Maximal size is less than 0")
+            }
+            break;
+          case '^max':
+            var min = parseInt(size[1])
+            if(min >= 0){
+              specialObject.sizeMin = parseInt(size[1])
             }else if(typeof size[1] === "undefined" || size[1] === "" ){
               throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
             }else if(min<0){
@@ -58,8 +119,8 @@ var data  = function(){
           case 'exact':
             var exactSize = parseInt(size[1])
             if(exactSize>=0){
-              specialObject.min = exactSize
-              specialObject.max = exactSize
+              specialObject.sizeMin = exactSize
+              specialObject.sizeMax = exactSize
             }else if(typeof size[1] === "undefined" || size[1] === ""){
               throw new Error("Exact size is undefined")
             }else if(exactSize<0){
@@ -78,13 +139,12 @@ var data  = function(){
                 typeof betweenSize[1] != "undefined" &&
                 parseInt(betweenSize[0]) <= parseInt(betweenSize[1])
               ){
-                specialObject.min = parseInt(betweenSize[0])
-                specialObject.max = parseInt(betweenSize[1])
-
-                if(specialObject.min<0){
+                specialObject.sizeMin = parseInt(betweenSize[0])
+                specialObject.sizeMax = parseInt(betweenSize[1])
+                if(specialObject.sizeMin<0){
                   throw new Error("Minimal size is less than 0")
                 }
-                if(specialObject.max<0){
+                if(specialObject.sizeMax<0){
                   throw new Error("Minimal size is less than 0")
                 }
               }else if(typeof betweenSize[0] === "undefined" || betweenSize[0] === ""){
@@ -104,117 +164,39 @@ var data  = function(){
               throw new Error("Minimal and Maximal Size are undefined, please check yout syntax at '"+n+"'")
             }
             break;
+          case 'required':
+            if(!notMatch){
+              if(!specialObject.sizeMin){
+                specialObject.sizeMin = 1
+              }
+            }else if(specialObject.pattern === "." && notMatch){
+              specialObject.pattern = "[ ]"
+            }else{
+
+            }
+            break;
+          case 'alpha' :
+          case 'alpha_dash' :
+          case 'alpha_num' :
+          case 'email' :
+            if(notMatch){
+              specialObject.pattern = availablePattern[size[0]].notMatch
+            }else{
+              specialObject.pattern = availablePattern[size[0]].pattern
+            }
+            if(size[0] === 'email'){
+              delete specialObject.sizeMin;
+            }
+            break;
+          default:
+            throw new Error("Unsupported validation")
+            break;
         }
+      }else{
+        throw new Error("Unsupported validation")
       }
     })
 
-    /* // try{
-    //   _.forEach(arrayOfValidation,function(n,key){
-    //
-    //     var size = n.split(':')
-    //     if(size.length > 0 && size.length<=2){
-    //       switch(size[0]){
-    //         case 'min':
-    //           var min = parseInt(size[1])
-    //           if(min >= 0){
-    //             specialObject.sizeMin = min
-    //           }else if(typeof size[1] === "undefined" || size[1] === "" ){
-    //             throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
-    //           }else if(min<0){
-    //             throw new Error("Minimal size is less than 0")
-    //           }
-    //           break;
-    //         case 'max':
-    //           var min = parseInt(size[1])
-    //           if(min >= 0){
-    //             specialObject.sizeMax = parseInt(size[1])
-    //           }else if(typeof size[1] === "undefined" || size[1] === "" ){
-    //             throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
-    //           }else if(min<0){
-    //             throw new Error("Maximal size is less than 0")
-    //           }
-    //           break;
-    //         case 'exact':
-    //           var exactSize = parseInt(size[1])
-    //           if(exactSize>=0){
-    //             specialObject.sizeMin = exactSize
-    //             specialObject.sizeMax = exactSize
-    //           }else if(typeof size[1] === "undefined" || size[1] === ""){
-    //             throw new Error("Exact size is undefined")
-    //           }else if(exactSize<0){
-    //             throw new Error("Exact size is less than 0")
-    //           }else{
-    //             throw new Error("Unknown Errors")
-    //           }
-    //           break;
-    //         case 'between':
-    //           if(typeof size[1] != "undefined" && size[1] != ""){
-    //             // throw new Error(size)
-    //             var betweenSize = size[1].split(",")
-    //
-    //             if(
-    //               typeof betweenSize[0] != "undefined" &&
-    //               typeof betweenSize[1] != "undefined" &&
-    //               parseInt(betweenSize[0]) <= parseInt(betweenSize[1])
-    //             ){
-    //               specialObject.sizeMin = parseInt(betweenSize[0])
-    //               specialObject.sizeMax = parseInt(betweenSize[1])
-    //               if(specialObject.sizeMin<0){
-    //                 throw new Error("Minimal size is less than 0")
-    //               }
-    //               if(specialObject.sizeMax<0){
-    //                 throw new Error("Minimal size is less than 0")
-    //               }
-    //             }else if(typeof betweenSize[0] === "undefined" || betweenSize[0] === ""){
-    //               // Throw Error
-    //               throw new Error("Minimal size is undefined, please check your syntax at '"+n+"'")
-    //             }else if(typeof betweenSize[1] === "undefined" || betweenSize[1] === ""){
-    //               // Throw Error
-    //               throw new Error("Maximal size is undefined, please check your syntax at '"+n+"'")
-    //             }else if(parseInt(betweenSize[0])>parseInt(betweenSize[1])){
-    //               // Throw Error
-    //               throw new Error("Minimal Size has bigger value than Maximal Size")
-    //             }else{
-    //               throw new Error("Unknown Error")
-    //             }
-    //           }else{
-    //             // Throw Error
-    //             throw new Error("Minimal and Maximal Size are undefined, please check yout syntax at '"+n+"'")
-    //           }
-    //           break;
-    //         case 'required':
-    //           if(!notMatch){
-    //             specialObject.sizeMin = 1
-    //           }else if(specialObject.pattern === "." && notMatch){
-    //             specialObject.pattern = "[ ]"
-    //           }else{
-    //
-    //           }
-    //           break;
-    //         case 'alpha' :
-    //         case 'alpha_dash' :
-    //         case 'alpha_num' :
-    //         case 'email' :
-    //           if(notMatch){
-    //             specialObject.pattern = availablePattern[size[0]].notMatch
-    //           }else{
-    //             specialObject.pattern = availablePattern[size[0]].pattern
-    //           }
-    //           if(size[0] === 'email'){
-    //             delete specialObject.sizeMin;
-    //           }
-    //           break;
-    //         default:
-    //           throw new Error("Unsupported validation")
-    //           break;
-    //       }
-    //     }else{
-    //       throw new Error("Unsupported validation")
-    //     }
-    //   })
-    // // }catch(e){
-    //   // return e
-    // // } */
     return specialObject;
   }
   /**
