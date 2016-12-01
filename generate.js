@@ -26,6 +26,9 @@ var data  = function(){
       var size = n.split(':')
       if(size.length > 0 && size.length<=2){
         switch(size[0]){
+          case 'required' :
+              specialObject.min = 1
+            break;
           case 'alpha' :
           case 'alpha_dash' :
           case 'alpha_num' :
@@ -198,21 +201,31 @@ var data  = function(){
    * @param {String} mode mode for RegExp {i,g,...}
    * @return {Object} Regular Expression Object
    */
-  function buildRegex(specialObject){
+  function buildRegex(specialObject, mode){
+    if(typeof mode === "undefined"){
+      mode = ""
+    }
     if(specialObject.pattern){
       var size = getRegexSize(specialObject);
       var regexSize;
+      var regexArray = []
+      var regexPattern = "";
 
-      regexSize = size.join();
-      if(regexSize){
-        regexSize = "{"+regexSize+"}"
-      }
+      _.forEach(size,function(data,index){
+        console.log(data)
+        regexSize = data.join();
+        if(regexSize){
+          regexSize = "{"+regexSize+"}"
+        }
+        if(!regexSize && specialObject.pattern[(specialObject.pattern.length-1)] != "}"){
+          specialObject.pattern += "+"
+        }
+        regexArray.push("^"+specialObject.pattern+regexSize+"")
+        console.log(regexArray);
+      })
 
-      if(!regexSize && specialObject.pattern[(specialObject.pattern.length-1)] != "}"){
-        specialObject.pattern += "+"
-      }
-
-      return new RegExp("^"+specialObject.pattern+regexSize+"$",mode);
+      regexPattern = regexArray.join("|")
+      return new RegExp("("+regexPattern+")$",mode);
     }else{
       throw new Error("Couldn't generate regex because of undefined pattern")
     }
@@ -235,12 +248,16 @@ var data  = function(){
               [0,specialObject.max],
               [specialObject.min,""]
             ]
-          }else if (specialObject.notMin){
-            var size = [0,specialObject.max]
-          }else if (specialObject.notMax){
-            var size = [specialObject.min,""]
+          }else if (specialObject.notMin && !specialObject.notMax ){
+            if(specialObject.min)
+              var size = [[specialObject.min,specialObject.max]]
+            else
+              var size = [[0,specialObject.max]]
+
+          }else if (specialObject.notMax && !specialObject.notMin){
+            var size = [[specialObject.min,""]]
           }else{
-            var size = [specialObject.min,specialObject.max]
+            var size = [[specialObject.min,specialObject.max]]
           }
         }else if(isNaN(specialObject.min) && !isNaN(specialObject.max)){
           // return new Error("Minimal size is not a number")
@@ -259,7 +276,7 @@ var data  = function(){
         return []
       }else{
         if(!isNaN(specialObject.min)){
-          var size = [specialObject.min,""]
+          var size = [[specialObject.min,""]]
         }else{
           // return new Error("Minimal size is not a number")
           return []
@@ -271,7 +288,7 @@ var data  = function(){
         return []
       }else{
         if(!isNaN(specialObject.max)){
-          var size = [0,specialObject.max];
+            var size = [[0,specialObject.max]];
         }else{
           // return new Error("Maximal size is not a number")
           return []
@@ -286,7 +303,6 @@ var data  = function(){
   }
 
   return {
-    'stringToArray' : stringToArray,
     'arrayToSpecialObj' : arrayToSpecialObj,
     'buildRegex' : buildRegex,
     'getRegexSize' : getRegexSize,
