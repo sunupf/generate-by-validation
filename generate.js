@@ -12,9 +12,11 @@ var data  = function(){
     // Convert string to Special Object
     // validation only array of input validation not the form validation
     var specialObject = this.arrayToSpecialObj(validations)
+    console.log(specialObject)
     var regexPattern = this.buildRegex(specialObject)
-    if(regexPattern)
-      return new Randexp(regexPattern).gen();
+    console.log(regexPattern)
+    if(regexPattern){
+      return new Randexp(regexPattern).gen()
     }else{
       throw new Error("Could not build regelar expression from parameters provided")
     }
@@ -40,7 +42,7 @@ var data  = function(){
           case 'alpha_dash' :
           case 'alpha_num' :
           case 'email' :
-            specialObject.pattern = rules[size[0]].pattern
+            specialObject.pattern = rules[size[0]]
             if(size[0] === 'email'){
               delete specialObject.size;
             }
@@ -220,7 +222,7 @@ var data  = function(){
       var regexPattern = "";
 
       _.forEach(size,function(data,index){
-        console.log(data)
+        // console.log(data)
         regexSize = data.join();
         if(regexSize){
           regexSize = "{"+regexSize+"}"
@@ -229,7 +231,7 @@ var data  = function(){
           specialObject.pattern += "+"
         }
         regexArray.push("^"+specialObject.pattern+regexSize+"")
-        console.log(regexArray);
+        // console.log(regexArray);
       })
 
       regexPattern = regexArray.join("|")
