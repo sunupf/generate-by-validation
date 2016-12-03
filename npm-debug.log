@@ -1,0 +1,106 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.3
+3 info using node@v6.7.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: 'D:\\Thesis\\generate-by-validation',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory C:\Users\sunup\AppData\Roaming\npm-cache\generate-by-validation\0.0.10\package.tgz not in flight; packing
+9 verbose correctMkdir C:\Users\sunup\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+10 info lifecycle generate-by-validation@0.0.10~prepublish: generate-by-validation@0.0.10
+11 silly lifecycle generate-by-validation@0.0.10~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ 'C:\\Users\\sunup\\AppData\\Roaming\\npm-cache\\generate-by-validation\\0.0.10\\package.tgz',
+12 verbose tar pack   'D:\\Thesis\\generate-by-validation' ]
+13 verbose tarball C:\Users\sunup\AppData\Roaming\npm-cache\generate-by-validation\0.0.10\package.tgz
+14 verbose folder D:\Thesis\generate-by-validation
+15 verbose addLocalTarball adding from inside cache C:\Users\sunup\AppData\Roaming\npm-cache\generate-by-validation\0.0.10\package.tgz
+16 verbose correctMkdir C:\Users\sunup\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+17 silly cache afterAdd generate-by-validation@0.0.10
+18 verbose afterAdd C:\Users\sunup\AppData\Roaming\npm-cache\generate-by-validation\0.0.10\package\package.json not in flight; writing
+19 verbose correctMkdir C:\Users\sunup\AppData\Roaming\npm-cache correctMkdir not in flight; initializing
+20 verbose afterAdd C:\Users\sunup\AppData\Roaming\npm-cache\generate-by-validation\0.0.10\package\package.json written
+21 silly publish { name: 'generate-by-validation',
+21 silly publish   version: '0.0.10',
+21 silly publish   description: 'Module to generate String based on validation',
+21 silly publish   main: 'generate.js',
+21 silly publish   dependencies: { lodash: '^3.10.1', randexp: '0.4.3' },
+21 silly publish   devDependencies: { chai: '^3.3.0', mocha: '^2.3.3' },
+21 silly publish   scripts: { test: 'mocha' },
+21 silly publish   author: { name: 'sunupf' },
+21 silly publish   license: 'MIT',
+21 silly publish   keywords: [ 'faker', 'invalid', 'mocks', 'generate', 'testing', 'data' ],
+21 silly publish   readme: '# generate-by-validation\r\nGenerate data based on validation. we can generate valid data and invalid data so we can use it for our functional test activity\r\n\r\nI\'m using https://github.com/fent/randexp.js to generate the data\r\n\r\n# Installation\r\n  ```javascript\r\n  npm install generate-by-validation\r\n  ```\r\n  \r\n# Usage\r\nFirst include the module to your project\r\n  ```javascript\r\n  var data = require(\'gen-by-validation\');\r\n  ```\r\nFor example you want generate name with minimal length = 5 and maximal length = 10\r\n  ```javascript\r\n  var name = data.generate([\'required\',\'min:5\',\'max:10\'])\r\n  console.log(name)\r\n  //will output something like : \'SnDueGq-IG\' =>length beetwen 5-10 \r\n  ```\r\n\r\nIf you want generate data which not match with name, min:5, and max:10 you can set second parameter to false\r\n  ```javascript\r\n  var name = data.generate([\'required\',\'min:5\',\'max:10\'],false)\r\n  console.log(name)\r\n  //will output something like : \'/,!/"474]5{$*\\\'/6~,8\\\'\\\'*%}!\' => length more than 10\r\n  ```\r\n\r\nThe result is random that\'s why the result ussually unpronounceable \r\n\r\n# Supported validation rule\r\n\r\n- alpha : a-z\r\n- min:x\r\n- max:y\r\n- between:x,y\r\n- exact:x\r\n\r\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: '43401ba9d87cffd939f9fbb8b5ff86275b119f55',
+21 silly publish   _id: 'generate-by-validation@0.0.10',
+21 silly publish   _shasum: 'd60ed38daaa76aad9611bee66b2d6759be8bdf51',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name generate-by-validation
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'generate-by-validation',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'generate-by-validation',
+26 silly mapToRegistry   name: 'generate-by-validation',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/generate-by-validation
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading C:\Users\sunup\AppData\Roaming\npm-cache\generate-by-validation\0.0.10\package.tgz
+30 verbose request uri https://registry.npmjs.org/generate-by-validation
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 1:46:39 PM
+33 verbose request using bearer token for auth
+34 verbose request id 7afee0db01340588
+35 http request PUT https://registry.npmjs.org/generate-by-validation
+36 http 403 https://registry.npmjs.org/generate-by-validation
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '96',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Sat, 03 Dec 2016 06:46:41 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-sin6924-SIN',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1480747600.080560,VS0,VE1284',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating C:\Users\sunup\AppData\Roaming\npm-cache\registry.npmjs.org\generate-by-validation on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 0.0.10." : generate-by-validation
+40 verbose stack     at makeError (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:264:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:252:14)
+40 verbose stack     at Request._callback (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:172:14)
+40 verbose stack     at Request.self.callback (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:200:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1067:10)
+40 verbose stack     at emitOne (events.js:101:20)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:988:12)
+41 verbose statusCode 403
+42 verbose pkgid generate-by-validation
+43 verbose cwd D:\Thesis\generate-by-validation
+44 error Windows_NT 10.0.14393
+45 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish"
+46 error node v6.7.0
+47 error npm  v3.10.3
+48 error code E403
+49 error "You cannot publish over the previously published version 0.0.10." : generate-by-validation
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
