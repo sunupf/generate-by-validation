@@ -10,7 +10,14 @@ var data  = function(){
    */
   function generate(validations){
     // Convert string to Special Object
-    var specialObject = arrayToSpecialObj(arrayOfValidation)
+    // validation only array of input validation not the form validation
+    var specialObject = this.arrayToSpecialObj(validations)
+    var regexPattern = this.buildRegex(specialObject)
+    if(regexPattern)
+      return new Randexp(regexPattern).gen();
+    }else{
+      throw new Error("Could not build regelar expression from parameters provided")
+    }
   }
 
   /**
@@ -195,6 +202,7 @@ var data  = function(){
 
     return specialObject;
   }
+
   /**
    * Build regex from special object
    * @param {Object} specialObject Special Object
