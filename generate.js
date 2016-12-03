@@ -35,7 +35,7 @@ var data  = function(){
       var size = n.split(':')
       if(size.length > 0 && size.length<=2){
         switch(size[0]){
-          case 'required' :
+          /*case 'required' :
               specialObject.min = 1
             break;
           case 'alpha' :
@@ -47,7 +47,7 @@ var data  = function(){
               delete specialObject.min;
               delete specialObject.max;
             }
-            break;
+            break;*/
           case 'min':
             var min = parseInt(size[1])
             if(min >= 0){
@@ -199,6 +199,18 @@ var data  = function(){
               throw new Error("Minimal and Maximal Size are undefined, please check yout syntax at '"+n+"'")
             }
             break;
+          default :
+            if(typeof rules[size[0]] != "undefined"){
+              specialObject.pattern = rules[size[0]]
+            }
+            if(size[0] === 'required'){
+              specialObject.min = 1
+            }
+            if(size[0] === 'email'){
+              delete specialObject.min;
+              delete specialObject.max;
+            }
+            break;
         }
       }
     })
@@ -225,12 +237,15 @@ var data  = function(){
       _.forEach(size,function(data,index){
         // console.log(data)
         regexSize = data.join();
+        console.log(regexSize);
         if(regexSize){
           regexSize = "{"+regexSize+"}"
         }
         if(!regexSize && (specialObject.pattern[(specialObject.pattern.length-1)] != ")" && specialObject.pattern[0] != "^")){
           specialObject.pattern += "+"
-          regexArray.push("^"+specialObject.pattern+regexSize+"")
+          regexArray.push("^"+specialObject.pattern+"")
+        }else if(regexSize){
+          regexArray.push(specialObject.pattern+regexSize)
         }else{
           regexArray.push(specialObject.pattern)
         }
