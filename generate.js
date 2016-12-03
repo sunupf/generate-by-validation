@@ -44,7 +44,8 @@ var data  = function(){
           case 'email' :
             specialObject.pattern = rules[size[0]]
             if(size[0] === 'email'){
-              delete specialObject.size;
+              delete specialObject.min;
+              delete specialObject.max;
             }
             break;
           case 'min':
@@ -216,7 +217,7 @@ var data  = function(){
       mode = ""
     }
     if(specialObject.pattern){
-      var size = getRegexSize(specialObject);
+      var size = this.getRegexSize(specialObject);
       var regexSize;
       var regexArray = []
       var regexPattern = "";
@@ -227,15 +228,17 @@ var data  = function(){
         if(regexSize){
           regexSize = "{"+regexSize+"}"
         }
-        if(!regexSize && specialObject.pattern[(specialObject.pattern.length-1)] != "}"){
+        if(!regexSize && (specialObject.pattern[(specialObject.pattern.length-1)] != ")" && specialObject.pattern[0] != "^")){
           specialObject.pattern += "+"
+          regexArray.push("^"+specialObject.pattern+regexSize+"")
+        }else{
+          regexArray.push(specialObject.pattern)
         }
-        regexArray.push("^"+specialObject.pattern+regexSize+"")
         // console.log(regexArray);
       })
 
       regexPattern = regexArray.join("|")
-      return new RegExp("("+regexPattern+")$",mode);
+      return new RegExp("("+regexPattern+")",mode);
     }else{
       throw new Error("Couldn't generate regex because of undefined pattern")
     }
@@ -271,42 +274,42 @@ var data  = function(){
           }
         }else if(isNaN(specialObject.min) && !isNaN(specialObject.max)){
           // return new Error("Minimal size is not a number")
-          return []
+          return [[]]
         }else if(!isNaN(specialObject.min) && isNaN(specialObject.max)){
           // return new Error("Maximal size is not a number")
-          return []
+          return [[]]
         }else{
           // return new Error("Minimal and Maximal size is not a number")
-          return []
+          return [[]]
         }
       }
     }else if(specialObject.min){
       if(specialObject.min < 0){
         // return new Error("Minimal size is less than zero")
-        return []
+        return [[]]
       }else{
         if(!isNaN(specialObject.min)){
           var size = [[specialObject.min,""]]
         }else{
           // return new Error("Minimal size is not a number")
-          return []
+          return [[]]
         }
       }
     }else if(specialObject.max){
       if(specialObject.max < 0){
         // return new Error("Maximal size is less than zero")
-        return []
+        return [[]]
       }else{
         if(!isNaN(specialObject.max)){
             var size = [[0,specialObject.max]];
         }else{
           // return new Error("Maximal size is not a number")
-          return []
+          return [[]]
         }
       }
     }else{
       // return new Error("Minimal or Maximal size is undefined")
-      return []
+      return [[]]
     }
 
     return size;

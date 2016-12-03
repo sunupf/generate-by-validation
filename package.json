@@ -5,7 +5,7 @@
   "main": "generate.js",
   "dependencies": {
     "lodash": "^3.10.1",
-    "randexp": "^0.4.0"
+    "randexp": "0.4.3"
   },
   "devDependencies": {
     "chai": "^3.3.0",
