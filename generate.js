@@ -330,6 +330,10 @@ var data  = function(){
     return size;
   }
 
+  function injectCustomRule(name,path){
+    this.rules[name] = require(path)
+  }
+
   return {
     'arrayToSpecialObj' : arrayToSpecialObj,
     'buildRegex' : buildRegex,
