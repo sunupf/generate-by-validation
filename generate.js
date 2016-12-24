@@ -331,7 +331,7 @@ var data  = function(){
   }
 
   function injectCustomRule(name,path){
-    this.rules[name] = require(path)
+    rules[name] = require(path)
   }
 
   return {
