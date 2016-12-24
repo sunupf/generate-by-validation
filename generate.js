@@ -15,8 +15,25 @@ var data  = function(){
     console.log(specialObject)
     var regexPattern = this.buildRegex(specialObject)
     console.log(regexPattern)
+
+
     if(regexPattern){
-      return new Randexp(regexPattern).gen()
+      var status = true;
+      while (status) {
+        var result = new Randexp(regexPattern).gen()
+        // check value apakah sesuai dengan callback juga
+
+        // check if has callback
+        if(specialObject.callbacks){
+          //loop semua callback
+          _.forEach(callbacks,function(callback,index){
+            status = status && callback()
+          })
+          //kalau gagal generate ulang (status false)
+          //kalau berhasil (status true
+        }
+      }
+      return result
     }else{
       throw new Error("Could not build regelar expression from parameters provided")
     }
@@ -30,6 +47,7 @@ var data  = function(){
     var specialObject = {}
 
     specialObject.pattern = "."
+    specialObject.callback = []
 
     _.forEach(arrayOfValidation,function(n,key){
       var size = n.split(':')
@@ -201,7 +219,11 @@ var data  = function(){
             break;
           default :
             if(typeof rules[size[0]] != "undefined"){
-              specialObject.pattern = rules[size[0]]
+              if(typeof rules[size[0]] === "function"){
+                specialObject.callbacks.push(rules[size[0]]);
+              }else{
+                specialObject.pattern = rules[size[0]]
+              }
             }
             if(size[0] === 'required'){
               specialObject.min = 1
@@ -339,6 +361,7 @@ var data  = function(){
     'buildRegex' : buildRegex,
     'getRegexSize' : getRegexSize,
     'generate' : generate,
+    'rules':rules,
     'injectCustomRule' : injectCustomRule,
   }
 }
