@@ -339,6 +339,7 @@ var data  = function(){
     'buildRegex' : buildRegex,
     'getRegexSize' : getRegexSize,
     'generate' : generate,
+    'injectCustomRule' : injectCustomRule,
   }
 }
 
