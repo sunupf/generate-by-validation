@@ -18,19 +18,30 @@ var data  = function(){
 
 
     if(regexPattern){
-      var status = true;
-      while (status) {
+      var status = false;
+      while (!status) {
         var result = new Randexp(regexPattern).gen()
         // check value apakah sesuai dengan callback juga
-
         // check if has callback
         if(specialObject.callbacks){
           //loop semua callback
-          _.forEach(callbacks,function(callback,index){
-            status = status && callback()
-          })
+          var callbackStatus = true;
+          try{
+            _.forEachRight(callbacks,function(callback,index){
+              callbackStatus = callbackStatus && callback.ruleCallback(callback,result)
+              if(!callbackStatus){
+                throw new Error("Break");
+              }
+            })
+          }catch(e){
+
+          }
+
+          if(callbackStatus){
+            status = true
+          }
           //kalau gagal generate ulang (status false)
-          //kalau berhasil (status true
+          //kalau berhasil (status true)
         }
       }
       return result
@@ -220,7 +231,29 @@ var data  = function(){
           default :
             if(typeof rules[size[0]] != "undefined"){
               if(typeof rules[size[0]] === "function"){
-                specialObject.callbacks.push(rules[size[0]]);
+                // var callback = {
+                //   'rule' : rules[size[0]],
+                // }
+                // specialObject.callbacks.push(callback);
+                var customParam = {
+                  'rule':size[0],
+                  'completeRule':n
+                }
+                if(size.length>1){
+                  customParam.ruleParam = size[1];
+                }
+
+                // eksekusi function nya
+                var customRuleRespon = rules[size[0]](customParam)
+                // check return valuenya
+                // string berarti pattern baru
+                // function berarti callback
+                if(typeof customRuleRespon === "string"){
+                  specialObject.pattern = customRuleRespon
+                }else if(typeof customRuleRespon === "function"){
+                  customParam.ruleCallback = customRuleRespon;
+                }
+                specialObject.callbacks.push(customParam)
               }else{
                 specialObject.pattern = rules[size[0]]
               }
