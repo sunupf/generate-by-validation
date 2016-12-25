@@ -17,7 +17,7 @@ var data  = function(){
     console.log(regexPattern)
 
 
-    if(regexPattern){
+    /*if(regexPattern){
       var status = false;
       while (!status) {
         var result = new Randexp(regexPattern).gen()
@@ -30,6 +30,47 @@ var data  = function(){
           try{
             _.forEachRight(specialObject.callbacks,function(callback,index){
               callbackStatus = callbackStatus && callback.ruleCallback(callback,result)
+              if(!callbackStatus){
+                throw new Error("Break");
+              }
+            })
+          }catch(e){
+            console.log(e.message);
+          }
+          console.log("----------");
+          if(callbackStatus){
+            status = true
+          }
+          //kalau gagal generate ulang (status false)
+          //kalau berhasil (status true)
+        }
+      }
+      return result
+    }else{
+      throw new Error("Could not build regelar expression from parameters provided")
+    }*/
+    var result = this.checkGeneratedResultToCallback(specialObject,regexPattern);
+    return result;
+  }
+
+  function checkGeneratedResultToCallback(specialObject,regexPattern){
+    if(regexPattern){
+      var status = false;
+      while (!status) {
+        var result = new Randexp(regexPattern).gen()
+        // check value apakah sesuai dengan callback juga
+        // check if has callback
+        console.log(result);
+        if(specialObject.callbacks){
+          //loop semua callback
+          var callbackStatus = true;
+          try{
+            _.forEachRight(specialObject.callbacks,function(callback,index){
+              var callbackValidation = callback.ruleCallback(callback,result)
+              callbackStatus = callbackStatus && callbackValidation;
+              if(typeof callbackValidation != "boolean"){
+                result = callbackValidation;
+              }
               if(!callbackStatus){
                 throw new Error("Break");
               }
@@ -245,11 +286,14 @@ var data  = function(){
                 }
 
                 // eksekusi function nya
+                if(size[0][0] === "^"){
+                  customParam.negation = true
+                }
                 var customRuleRespon = rules[size[0]](customParam)
-                // check return valuenya
                 console.log(customRuleRespon);
                 // string berarti pattern baru
                 // function berarti callback
+
                 if(typeof customRuleRespon === "string"){
                   specialObject.pattern = customRuleRespon
                 }else if(typeof customRuleRespon === "function"){
