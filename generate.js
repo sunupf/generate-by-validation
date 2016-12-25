@@ -440,8 +440,9 @@ var data  = function(){
     'buildRegex' : buildRegex,
     'getRegexSize' : getRegexSize,
     'generate' : generate,
-    'rules':rules,
+    'checkGeneratedResultToCallback' : checkGeneratedResultToCallback,
     'injectCustomRule' : injectCustomRule,
+    'rules':rules
   }
 }
 
