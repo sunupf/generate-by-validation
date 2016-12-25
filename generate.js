@@ -23,20 +23,21 @@ var data  = function(){
         var result = new Randexp(regexPattern).gen()
         // check value apakah sesuai dengan callback juga
         // check if has callback
+        console.log(result);
         if(specialObject.callbacks){
           //loop semua callback
           var callbackStatus = true;
           try{
-            _.forEachRight(callbacks,function(callback,index){
+            _.forEachRight(specialObject.callbacks,function(callback,index){
               callbackStatus = callbackStatus && callback.ruleCallback(callback,result)
               if(!callbackStatus){
                 throw new Error("Break");
               }
             })
           }catch(e){
-
+            console.log(e.message);
           }
-
+          console.log("----------");
           if(callbackStatus){
             status = true
           }
@@ -58,7 +59,7 @@ var data  = function(){
     var specialObject = {}
 
     specialObject.pattern = "."
-    specialObject.callback = []
+    specialObject.callbacks = []
 
     _.forEach(arrayOfValidation,function(n,key){
       var size = n.split(':')
@@ -246,14 +247,15 @@ var data  = function(){
                 // eksekusi function nya
                 var customRuleRespon = rules[size[0]](customParam)
                 // check return valuenya
+                console.log(customRuleRespon);
                 // string berarti pattern baru
                 // function berarti callback
                 if(typeof customRuleRespon === "string"){
                   specialObject.pattern = customRuleRespon
                 }else if(typeof customRuleRespon === "function"){
                   customParam.ruleCallback = customRuleRespon;
+                  specialObject.callbacks.push(customParam)
                 }
-                specialObject.callbacks.push(customParam)
               }else{
                 specialObject.pattern = rules[size[0]]
               }
