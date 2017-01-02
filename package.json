@@ -1,6 +1,6 @@
 {
   "name": "generate-by-validation",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Module to generate String based on validation",
   "main": "generate.js",
   "dependencies": {
