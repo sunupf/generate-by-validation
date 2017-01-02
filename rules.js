@@ -7,7 +7,7 @@ var rules = {
   "^alpha_dash": "[^a-zA-Z\-]",
   "numeric" : "[0-9]",
   "^numeric" : "[^0-9]",
-  "email" : "^[a-zA-Z][a-zA-Z0-9._-]{1,20}@[a-zA-Z0-9\-]{1,20}[.]([a-z]{2,6}|[a-z]{2,6}[.][a-z]{2,3})",
+  "email" : "^[a-zA-Z][a-zA-Z0-9._-]{1,20}@[a-zA-Z]{1,}[a-zA-Z0-9\-]{1,20}[.]([a-z]{2,6}|[a-z]{2,6}[.][a-z]{2,3})",
   "^email" : "[^a-zA-Z0-9._-]",
   // "unique" : require("....")
 }
