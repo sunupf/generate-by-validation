@@ -16,39 +16,6 @@ var data  = function(){
     var regexPattern = this.buildRegex(specialObject)
     console.log(regexPattern)
 
-
-    /*if(regexPattern){
-      var status = false;
-      while (!status) {
-        var result = new Randexp(regexPattern).gen()
-        // check value apakah sesuai dengan callback juga
-        // check if has callback
-        console.log(result);
-        if(specialObject.callbacks){
-          //loop semua callback
-          var callbackStatus = true;
-          try{
-            _.forEachRight(specialObject.callbacks,function(callback,index){
-              callbackStatus = callbackStatus && callback.ruleCallback(callback,result)
-              if(!callbackStatus){
-                throw new Error("Break");
-              }
-            })
-          }catch(e){
-            console.log(e.message);
-          }
-          console.log("----------");
-          if(callbackStatus){
-            status = true
-          }
-          //kalau gagal generate ulang (status false)
-          //kalau berhasil (status true)
-        }
-      }
-      return result
-    }else{
-      throw new Error("Could not build regelar expression from parameters provided")
-    }*/
     var result = this.checkGeneratedResultToCallback(specialObject,regexPattern);
     return result;
   }
@@ -297,6 +264,7 @@ var data  = function(){
                 if(typeof customRuleRespon === "string"){
                   specialObject.pattern = customRuleRespon
                 }else if(typeof customRuleRespon === "function"){
+                  customParam.validations = arrayOfValidation;
                   customParam.ruleCallback = customRuleRespon;
                   specialObject.callbacks.push(customParam)
                 }
