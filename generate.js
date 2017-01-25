@@ -32,7 +32,7 @@ var data  = function(){
           //loop semua callback
           var callbackStatus = true;
           try{
-            _.forEachRight(specialObject.callbacks,function(callback,index){
+            _.forEach(specialObject.callbacks,function(callback,index){
               var callbackValidation = callback.ruleCallback(callback,result)
               callbackStatus = callbackStatus && callbackValidation;
               if(typeof callbackValidation != "boolean"){
