@@ -255,6 +255,8 @@ var data  = function(){
                 // eksekusi function nya
                 if(size[0][0] === "^"){
                   customParam.negation = true
+                }else{
+                  customParam.negation = false
                 }
                 var customRuleRespon = rules[size[0]](customParam)
                 console.log(customRuleRespon);
